@@ -35,13 +35,12 @@
 (define (plus n m)
   (lambda (f v) (m f (n f v))))
 
-(define (mult n m)
-  (lambda (f v)
-    (define (helper i res)
-      (if (= (i f v) (n f v))
-          (res f v)
-          (helper (succ i) (plus res m))))
-    (helper zero zero)))
-    
 
-(define (pred n) void)
+(define (mult n m)
+  (lambda (f v) (m (lambda (v) (n f v)) v)))
+
+(define (pred n)
+  (lambda (f v)
+    (if (= (from-numeral n) 0)
+        (zero f v)
+        ((to-numeral (- (from-numeral n) 1)) f v))))
