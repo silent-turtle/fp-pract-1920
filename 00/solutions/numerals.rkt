@@ -15,10 +15,9 @@
     (f (n f v))))
 
 (define (from-numeral n)
-  (define num 0)
-  (define fun (lambda (x) (+ x 1)))
+  (define f (lambda (x) (+ x 1)))
   (define (helper current cnt)
-    (if (= (current fun num) (n fun num))
+    (if (= (current f 0) (n f 0))
         cnt
         (helper (succ current) (+ cnt 1))))
   (helper zero 0))
@@ -39,8 +38,4 @@
 (define (mult n m)
   (lambda (f v) (m (lambda (v) (n f v)) v)))
 
-(define (pred n)
-  (lambda (f v)
-    (if (= (from-numeral n) 0)
-        (zero f v)
-        ((to-numeral (- (from-numeral n) 1)) f v))))
+(define (pred n) void)
