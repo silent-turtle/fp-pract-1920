@@ -16,7 +16,9 @@
   (helper 0 n 0))
 
 (define (from-k-ary n k)
-  (transform-to-k-ary n 10 k)) 
+  (transform-to-k-ary n 10 k))
 
 (define (to-k-ary n k)
   (transform-to-k-ary n k 10))
+
+(to-k-ary 69217 7)
