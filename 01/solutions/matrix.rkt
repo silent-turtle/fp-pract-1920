@@ -89,4 +89,7 @@
 
 ; 13.
 (define (zip-matrix xss yss)
-  (apply map (lambda (xs ys) (zip-with cons xs ys)) (list xss yss)))
+  (if (or (null? xss)
+          (null? yss))
+      '()
+      (cons (zip-with cons (car xss) (car yss)) (zip-matrix (cdr xss) (cdr yss)))))
