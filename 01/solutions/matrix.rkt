@@ -22,7 +22,7 @@
 
 ; 00.
 (define (all? p? xs)
-  (foldl (lambda (x y) (and (p? x) y)) (and) xs))
+  (foldl (lambda (x y) (and x y)) (and) (map p? xs)))
 
 ; 01.
 (define (any? p? xs)
