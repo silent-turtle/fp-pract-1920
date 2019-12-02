@@ -22,7 +22,7 @@
 
 ; 01.
 (define (any? p? xs)
-  (foldl (lambda (x y) (or (p? x) y)) (or) xs))
+  (foldl (lambda (x y) (or x y)) (or) (map p? xs)))
 
 ; 02.
 (define (concat xss)
