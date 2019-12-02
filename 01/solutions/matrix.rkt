@@ -42,11 +42,15 @@
   (list-ref (list-ref xss i) j))
 
 ; 06.
-(define (set xs i x) 
-  (cond ((null? xs) xs)
-        ((= i 0) (cons x (cdr xs)))
-        (else (cons (car xs) (set (cdr xs) (- i 1) x)))))
-  
+(define (set xs i x)
+  (define (map-index op nv a b f next l)
+    (if (null? l)
+        nv
+        (op (f a (car l)) (map-index op nv (next a) b f next (cdr l)))))
+
+  (map-index cons '() 0 (length xs)
+             (lambda (n head) (if (= n i) x head)) (lambda (x) (+ x 1)) xs))
+
 ; 07.
 (define (place xss i j x)
   (cond ((null? xss) xss)
