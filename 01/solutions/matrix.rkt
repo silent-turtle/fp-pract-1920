@@ -53,9 +53,13 @@
 
 ; 07.
 (define (place xss i j x)
-  (cond ((null? xss) xss)
-        ((= i 0) (cons (set (car xss) j x) (cdr xss)))
-        (else (cons (car xss) (place (cdr xss) (- i 1) j x)))))
+  (define (map-index op nv a b f next l)
+    (if (null? l)
+        nv
+        (op (f a (car l)) (map-index op nv (next a) b f next (cdr l)))))
+
+  (map-index cons '() 0 (length xss)
+             (lambda (n head) (if (= n i) (set head j x) head)) (lambda (x) (+ x 1)) xss))
 
 ; 08.
 (define (diag xss)
