@@ -16,10 +16,6 @@
          zip-matrix)
 ; the provide "exports" these functions
 
-(define even? (lambda (x) (= (remainder x 2) 0)))
-
-(define matrix '((1 2 3) (4 5 6) (7 8 9)))
-
 ; 00.
 (define (all? p? xs)
   (foldl (lambda (x y) (and x y)) (and) (map p? xs)))
