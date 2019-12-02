@@ -10,11 +10,26 @@
 
 ; winner implementation that only detects draws right now.
 ; Put your own implementation here!
-(define (winner b)
-  (if (andmap (lambda (xs) (andmap id xs)) b)
-      "D"
-      #f))
+(define (check-all-if-all sym b)
+  (any? (lambda (x) (eqv? x #t)) (map (lambda (xs) (all? (lambda (x) (eqv? x sym)) xs)) b)))
 
+(define (check-all-if-any sym b)
+  (any? (lambda (x) (eqv? x #t)) (map (lambda (xs) (any? (lambda (x) (eqv? x sym)) xs)) b)))
+
+(define (winner b)
+  (cond ((or (check-all-if-all "X" (rows b))
+             (check-all-if-all "X" (cols b))
+             (check-all-if-all "X" (diags b))) "X")
+        ((or (check-all-if-all "O" (rows b))
+             (check-all-if-all "O" (cols b))
+             (check-all-if-all "O" (diags b))) "O")
+        ((or (check-all-if-any #f (rows b))
+             (check-all-if-any #f (cols b))
+             (check-all-if-any #f (diags b))) #f)
+        (else "D")))
+        
+
+  
 ; "Dumb" "AI", plays the "next" free spot, going left-to-right, top-to-bottom.
 ; Put your own implementation here!
 (define (play curr-board curr-sign)
