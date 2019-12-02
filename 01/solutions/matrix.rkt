@@ -35,8 +35,7 @@
 (define (cols xss)
   (if (null? (cdar xss))
       (list (map car xss))
-      (append (list (map car xss))
-              (cols (map cdr xss)))))
+      (cons (map car xss) (cols (map cdr xss)))))
 
 ; 05.
 (define (matrix-ref xss i j)
