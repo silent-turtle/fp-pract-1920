@@ -82,7 +82,10 @@
 
 ; 12.
 (define (zip-with f xs ys)
-  (apply map f (list xs ys)))
+  (if (or (null? xs)
+          (null? ys))
+      '()
+      (cons (f (car xs) (car ys)) (zip-with f (cdr xs) (cdr ys)))))
 
 ; 13.
 (define (zip-matrix xss yss)
