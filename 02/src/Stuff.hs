@@ -49,5 +49,5 @@ groupOn _ [] = []
 groupOn f xs = map (map fst) (groupBy ((==) `on` snd) (map ((&&&) id f) xs))
 
 classifyOn :: Ord b => (a -> b) -> [a] -> [[a]]
--- gonna fix it later
-classifyOn f xs = groupOn f (sortOn f xs) 
+classifyOn _ [] = []
+classifyOn f xs = map (map fst) (groupBy ((==) `on` snd) (sortBy (compare `on` snd) (map ((&&&) id f) xs))) 
