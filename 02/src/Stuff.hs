@@ -10,29 +10,44 @@ module Stuff
   ) where
 
 group :: Eq a => [a] -> [[a]]
-group = undefined
-
--- Not mandatory, delete if you don't want this.
-insertBy :: (a -> a -> Ordering) -> a -> [a] -> [a]
-insertBy = undefined
+group [] = []
+group (x:xs) = (x : takeWhile (==x) xs) : group (dropWhile (==x) xs)
 
 sortBy :: (a -> a -> Ordering) -> [a] -> [a]
-sortBy = undefined
+sortBy _ [] = []
+sortBy comp list = mergeSort list
+  where merge [] xs = xs
+        merge xs [] = xs
+        merge (x:xs) (y:ys)
+          | (comp x y == LT) || (comp x y == EQ) = x : merge xs (y:ys)
+          | otherwise = y : merge (x:xs) ys
+        split xs n = splitHelper xs n []
+          where splitHelper ys m buffer
+                  | m == 0 || null ys = (reverse buffer, ys)
+                  | otherwise = splitHelper (tail ys) (pred m) (head ys : buffer)
+        mergeSort [] = []
+        mergeSort [x] = [x]
+        mergeSort xs = merge (mergeSort (fst splitxs)) (mergeSort (snd splitxs))
+          where splitxs = split xs (length xs `quot`  2)
 
 groupBy :: (a -> a -> Bool) -> [a] -> [[a]]
-groupBy = undefined
+groupBy _ [] = []
+groupBy p (x:xs) = (x:takeWhile (p x) xs) : groupBy p (dropWhile (p x) xs)
 
 on :: (b -> b -> c) -> (a -> b) -> a -> a -> c
-on = undefined
+on f g x y = f (g x) (g y)
 
 (&&&) :: (a -> b) -> (a -> c) -> a -> (b, c)
-(&&&) = undefined
+(&&&) f g x = (f x, g x)
 
 sortOn :: Ord b => (a -> b) -> [a] -> [a]
-sortOn = undefined
+sortOn _ [] = []
+sortOn f xs = map fst (sortBy (compare `on` snd) (map (id &&& f) xs)) 
 
 groupOn :: Eq b => (a -> b) -> [a] -> [[a]]
-groupOn = undefined
+groupOn _ [] = []
+groupOn f xs = map (map fst) (groupBy ((==) `on` snd) (map (id &&& f) xs))
 
 classifyOn :: Ord b => (a -> b) -> [a] -> [[a]]
-classifyOn = undefined
+classifyOn _ [] = []
+classifyOn f xs = map (map fst) (groupBy ((==) `on` snd) (sortBy (compare `on` snd) (map (id &&& f) xs))) 
