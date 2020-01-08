@@ -14,10 +14,9 @@ data Tree a
 
 instance Eq a => Eq (Tree a) where
   (==) :: Tree a -> Tree a -> Bool
-  (==) Empty Empty = True
-  (==) Empty Node {} = False
-  (==) Node {} Empty = False
-  (==) (Node a left1 right1) (Node b left2 right2) = (a == b) && (left1 == left2) && (right1 == right2) 
+  Empty == Empty = True
+  Node a left1 right1 == Node b left2 right2 = a == b && left1 == left2 && right1 == right2
+  _ == _ = False
 
 insertOrdered :: Ord a => a -> Tree a -> Tree a
 insertOrdered x Empty = Node x Empty Empty
@@ -70,8 +69,7 @@ onMaybe :: (a -> Bool) -> a -> Maybe a
 onMaybe p x = if p x then Just x else Nothing
 
 findPred :: (a -> Bool) -> Tree a -> Maybe a
--- findPred p = getFirst . foldMapTree (onMaybe p)
-findPred = undefined
+findPred p = getFirst . foldMapTree (First . onMaybe p)
 
 findAll :: (a -> Bool) -> Tree a -> [a]
 findAll p = foldMapTree (\x -> [x | p x])
