@@ -42,13 +42,15 @@ modify :: Eq k => k -> v -> [(k, v)] -> [(k, v)]
 modify _ _ [] = []
 modify key value ((k, v):xs)
   | key == k = (key, value) : modify key value xs
-  | otherwise = (k, v) : modify key value xs 
+  | otherwise = (k, v) : modify key value xs
 
 insert :: String -> a -> Trie a -> Trie a
 insert "" value (Node _ xs) = Node (Just value) xs
-insert (x:xs) value (Node y ys) 
-  | isNothing (lookupTrie (x:xs) (Node y ys)) = Node y ((x, insert xs value (Node Nothing [])):ys)
-  | otherwise = Node y ys
+insert (x:xs) value (Node y ys) = Node y (insertChildren ys)
+  where insertChildren [] = [(x, insert xs value (Node Nothing []))]
+        insertChildren ((sym, trie):zs)
+          | sym == x = (x, insert xs value trie) : insertChildren zs
+          | otherwise = (sym, trie) : insertChildren zs
 
 lookupTrie :: String -> Trie a -> Maybe a
 lookupTrie "" (Node x _) = x
